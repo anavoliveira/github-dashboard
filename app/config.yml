@@ -1,0 +1,23 @@
+tasks:
+  task-clone:
+    repository: workflow
+    steps:
+      - action: clone
+        org: 'anavoliveira'
+
+      - action: commit_file
+        auto_commit: 'true'
+        commit_msg: "Commit de teste"
+        branch: feature-teste45
+        # file_path: 'config.yml'
+      
+      - action: workflow_monitor
+        workflow_name: "1 - FEAT - Build and PR"
+
+      - action: approve_pull_request
+        # source_branch: feature-teste
+        target_branch: develop
+
+      - action: workflow_monitor
+        workflow_name: "2 - DEV - Build and Deploy"
+      

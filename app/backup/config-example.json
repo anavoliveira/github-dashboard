@@ -1,0 +1,70 @@
+{
+  "tasks": {
+    "base_task": {
+      "repository": "{repo_name}",
+      "steps": [
+        {
+          "action": "clone",
+          "org": "itau-corp"
+        },
+        {
+          "action": "replace_file",
+          "source_path": "{pipeline_version}/{sdk_version}/config.yml",
+          "target_path": ""
+        },
+        {
+          "action": "replace_dir",
+          "source_path": "{pipeline_version}/.github/workflows",
+          "target_path": ".github/workflows"
+        }
+
+      ]
+    }
+  },
+  "possible_steps": {
+    "analytics": {
+      "action": "workflow_monitor",
+      "workflow_name": "1 - ANALYTICS - Build and PR",
+      "show_workflow": "true"
+    },
+    "approve_pr_to_delevop": {
+      "action": "approve_pull_request",
+      "source_branch": "{branch_name}",
+      "target_branch": "develop"
+    },
+    "feature": {
+      "action": "workflow_monitor",
+      "workflow_name": "1 - FEAT - Build and PR",
+      "show_workflow": "true"
+    },
+    "develop": {
+      "action": "workflow_monitor",
+      "workflow_name": "2 - DEV - Build and Deploy"
+    },
+    "approve_pr_to_release": {
+      "action": "approve_pull_request",
+      "source_branch": "develop",
+      "target_branch": "release/*"
+    },
+    "homol": {
+      "action": "workflow_monitor",
+      "workflow_name": "3 - HOM - Homologacao"
+    },
+    "destroy": {
+      "action": "destroy",
+      "file_path": "config.yml",
+      "value": "{destroy_value}"
+    },
+    "commit":{
+      "action": "commit_file",
+      "auto_commit": "true",
+      "branch": "{branch_inicial}",
+      "commit_msg": "Iniciando a execucao dos testes regressivos"
+    },
+    "start_step_function":{
+      "action": "start_step_function",
+      "name": "{project_name}",
+      "account": "{account_id}"
+    }
+  }
+}
